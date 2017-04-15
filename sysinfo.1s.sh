@@ -49,7 +49,7 @@ echo "---"
 echo "Mem:   ${mem_used%%.*} / ${mem_full%%.*} MiB"
 echo "Swap:   ${swap_used%%.*} / ${swap_full%%.*} MiB"
 echo "---"
-echo "$top | font=monospace size=12 trim=true"
+echo "$top | font=monospace size=10 trim=true"
 echo "---"
 
 get_disk_stats

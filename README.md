@@ -1,6 +1,6 @@
 <h3>System monitor extension for Argos</h3>
 
-<img src="http://i.imgur.com/HcIqehd.png">
+<img src="http://i.imgur.com/77xclQE.png">
 
 This is extension I created specially for [Argos](https://github.com/p-e-w/argos) and linux-powered computers.
 It is based on *free*, *top* and *vmstat* output.
