@@ -1,4 +1,4 @@
-<h3>System monitor extension for [Argos](https://github.com/p-e-w/argos)</h3>
+<h3>System monitor extension for Argos</h3>
 
 <img src="http://i.imgur.com/HcIqehd.png">
 
