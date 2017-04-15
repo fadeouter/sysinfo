@@ -46,8 +46,8 @@ get_disk_stats() {
 
 echo "<b>$CPU%</b>   ${mem%%.*}/${swap%%.*} | size=10 iconName=utilities-system-monitor-symbolic"
 echo "---"
-echo "Mem:   ${mem_used%%.*} / ${mem_full%%.*} GB"
-echo "Swap:   ${swap_used%%.*} / ${swap_full%%.*} GB"
+echo "Mem:   ${mem_used%%.*} / ${mem_full%%.*} MiB"
+echo "Swap:   ${swap_used%%.*} / ${swap_full%%.*} MiB"
 echo "---"
 echo "$top | font='Ubuntu Mono' size=12 trim=true"
 echo "---"
