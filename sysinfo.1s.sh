@@ -4,7 +4,7 @@
 # based on some findings on the internet
 # based on Ganesh V BitBar script (https://github.com/ganeshv/mtop)
 # author: fadeouter (https://github.com/fadeouter/)
-# before use: sudo apt install top systat
+# before use: sudo apt install top sysstat
 
 
 raw_mem=$(free -m | grep Mem)

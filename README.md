@@ -7,4 +7,4 @@ It is based on *free*, *top* and *vmstat* output.
 
 Do before you going to use this:
 
-```sudo apt install top systat```
+```sudo apt install top sysstat```
