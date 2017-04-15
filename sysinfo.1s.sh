@@ -49,7 +49,7 @@ echo "---"
 echo "Mem:   ${mem_used%%.*} / ${mem_full%%.*} MiB"
 echo "Swap:   ${swap_used%%.*} / ${swap_full%%.*} MiB"
 echo "---"
-echo "$top | font='Ubuntu Mono' size=12 trim=true"
+echo "$top | font=monospace size=12 trim=true"
 echo "---"
 
 get_disk_stats
@@ -60,5 +60,5 @@ for ((i = 0; i < ${#capacity[@]}; i++)); do
         echo "---"
 done
 
-echo "Clean space | iconName=baobab bash=baobab terminal=false"
+echo "Check free space | iconName=baobab bash=baobab terminal=false"
 echo "Open System Monitor | iconName=utilities-system-monitor bash=gnome-system-monitor terminal=false"
