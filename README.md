@@ -22,10 +22,10 @@ Do before you going to use script:
 Explanation:
 * top output (first 3 processes)
 * total CPU consumption
-```---```
+* ```---```
 * memory 
 * swap
-```---```
+* ```---```
 * disks
 
 <img src="http://i.imgur.com/jH1oxNq.png">
