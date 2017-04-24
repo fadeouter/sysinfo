@@ -8,7 +8,7 @@
 
 
 bg_color="#c9dfe5"	# pie bg color
-fg_color="#8c5ea0"	# pie fill color
+fg_color="#72586a"	# pie fill color
 hw="16px"		# adjust this variable to your screen DPI
 
 
@@ -34,6 +34,8 @@ echo "| image=$cpu_icon imageHeight=$hw"
 echo "---"
 
 echo "$top<span font='5'>--------------------------</span>\n<span color='#444444' font='10.5'><b>$CPU   total</b></span>| font=monospace size=10 image=$cpu_icon imageHeight=16px bash=gnome-system-monitor terminal=false"
+
+echo "---"
 
 ################################################################
 #
@@ -110,8 +112,6 @@ get_disk_stats() {
 }
 
 get_disk_stats
-
-echo "---"
 
 for ((i = 0; i < ${#capacity[@]}; i++)); do
 	echo "${cap[$i]}   <span color='#555555' font='10'>${name[$i]}</span> | iconName=drive-harddisk-system length=20"

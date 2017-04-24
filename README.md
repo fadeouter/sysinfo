@@ -1,10 +1,21 @@
 <h3>System monitor extension for Argos</h3>
 
-<img src="http://i.imgur.com/77xclQE.png">
-
 This is extension I created specially for [Argos](https://github.com/p-e-w/argos) and linux-powered computers.
 It is based on *free*, *top* and *vmstat* output.
 
-Do before you going to use this:
+It uses generated SVG images to display CPU consumption (bar chart) and to display memory and swap use (pie charts).
+
+Please note that the CPU consumption is *very* approximate and it not accurate as well.
+
+*TODO*
+
+* add disks usage chart
+* beautify charts with power of SVG
+* draw realtime charts
+
+Do before you going to use script:
 
 ```sudo apt install top sysstat```
+
+<img src="http://i.imgur.com/jH1oxNq.png">
+
