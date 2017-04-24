@@ -17,5 +17,16 @@ Do before you going to use script:
 
 ```sudo apt install top sysstat```
 
+<h2>Screenshot</h2>
+
+Explanation:
+* top output (first 3 processes)
+* total CPU consumption
+---
+* memory 
+* swap
+---
+* discs
+
 <img src="http://i.imgur.com/jH1oxNq.png">
 
