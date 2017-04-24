@@ -9,7 +9,8 @@ Please note that the CPU consumption is *very* approximate and it not accurate a
 
 *TODO*
 
-* add disks usage chart
+* rewrite pie charts implementation
+* add disks usage charts
 * beautify charts with power of SVG
 * draw realtime charts
 
