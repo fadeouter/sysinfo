@@ -26,7 +26,7 @@ if [ "$top_cpu" \> "$CPU" ]; then
 CPU=$(echo "$top_cpu"|awk '{ printf("%-4s", $1"%"); }')
 fi
 
-cpu_bar_height=$(echo $CPU | grep -o '[0-9]*' | awk '{print $1 / 6.25}') #scaling for SVG bar; need to rewrite for bigger DPI (also as SVG code)
+cpu_bar_height=$(echo $CPU | grep -o '[0-9]*')
 
 cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='$hw' height='$hw' viewBox='0 0 120px 120px'><g transform='translate(0,120) scale(1, -1)'><rect rx='7px' y='10px' x='20px' height='100px' width='60px' fill='$bg_color' /><rect rx='7px' y='10px' x='20px' height='$cpu_bar_height' width='60px' fill='$fg_color' /></g></svg>" | base64 -w 0)
 
