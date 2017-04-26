@@ -18,22 +18,24 @@ hw="16px"		# adjust this variable to your screen DPI
 #
 ################################################################
 
-CPU=$(echo $[100-$(vmstat 1 2|tail -1|awk '{print $15}')])
-CPUD=$(echo $CPU | awk '{print $1 * 0.1}' | awk '{ printf("%.0f\n", $1); }' | awk '{print $0"0"}')
+CPU=$(echo $[100-$(vmstat 1 2|tail -1|awk '{print $15}')]|awk '{ printf("%-4s", $1"%"); }')
 top=$(top -bn 1 | grep -v "top\|Tasks\|Cpu\|KiB" | awk '{ printf("%-4s %-s\n", $9 / 2, $12); }' | head -n 5 | tail -n+3 | awk 1 ORS="\\\\n")
 top_cpu=$(echo $top | sed 's/\\n/ /g' | awk '{ print $1 + $3 + $5}')
 
 if [ "$top_cpu" \> "$CPU" ]; then
-CPU=$(echo "$top_cpu")
+CPU=$(echo "$top_cpu"|awk '{ printf("%-4s", $1"%"); }')
 fi
 
-cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='120px' height='120px' viewBox='0 0 120px 120px'><g transform='translate(0,120) scale(1, -1)'><rect rx='7px' y='10px' x='25px' height='100px' width='50px' fill='$bg_color' /><rect rx='7px' y='10px' x='25px' height='$top_cpu' width='50px' fill='$fg_color' /></g></svg>" | base64 -w 0)
+cpu_bar_height=$(echo $CPU | grep -o '[0-9]*' | awk '{print $1 / 6.25}') #scaling for SVG; need to rewrite for bigger DPI (also as SVG code)
 
-echo "| image=$cpu_icon imageHeight=$hw"
+cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='16px' height='16px' viewBox='0 0 16px 16px'><g transform='translate(0,16) scale(1, -1)'><rect rx='2px' y='1px' x='5px' height='14px' width='6px' fill='$bg_color' /><rect rx='1px' y='1px' x='5px' height='$cpu_bar_height' width='6px' fill='$fg_color' /></g></svg>" | base64 -w 0)
+
+echo "| image=$cpu_icon imageHeight=16"
 
 echo "---"
+echo "<b>$CPU</b> CPU | image=$cpu_icon imageHeight=16px font=monospace size=10"
 
-echo "$top<span font='5'>--------------------------</span>\n<span color='#444444' font='10.5'><b>$CPU   total</b></span>| font=monospace size=10 image=$cpu_icon imageHeight=16px bash=gnome-system-monitor terminal=false"
+echo "$top| font=monospace size=10 iconName=utilities-system-monitor  bash=gnome-system-monitor terminal=false"
 
 echo "---"
 
@@ -50,7 +52,7 @@ mem_D=$(echo $raw_mem | awk '{print (($2 - $7) / $2) * 10}' | awk '{ printf("%.0
 mem_full=$(echo $raw_mem | awk '{print $2}')
 swap_used=$(echo $raw_swap | awk '{print $3}')
 swap_full=$(echo $raw_swap | awk '{print $2}')
-swap_D=$(echo $raw_swap | awk '{print ($4 / $2) * 10}' | awk '{ printf("%.0f\n", $1); }' | awk '{print $0"0"}')
+swap_D=$(echo $raw_swap | awk '{print ($3 / $2) * 10 }' | awk '{ printf("%.0f\n", $1); }' | awk '{print $0"0"}')
 
 
 pie_start="<svg width='$hw' height='$hw' viewBox='0 0 90.146759 90.144005'><g transform='translate(-59.928 -103.428)'><circle cx='105' cy='148.5' r='45.979' fill='$bg_color'/>"
@@ -74,8 +76,8 @@ pie_mem="pie_$mem_D"
 pie_mem=$(echo "${!pie_mem}")
 pie_mem=$(echo "$pie_start$pie_mem" | base64 -w 0)
 
-echo "${mem_used%%.*} / ${mem_full%%.*} MiB | image=$pie_mem"
-echo "${swap_used%%.*} / ${swap_full%%.*} MiB | image=$pie_sw"
+echo "Mem: ${mem_used%%.*} / ${mem_full%%.*} MiB | image=$pie_mem"
+echo "Swap: ${swap_used%%.*} / ${swap_full%%.*} MiB | image=$pie_sw"
 
 echo "---"
 
