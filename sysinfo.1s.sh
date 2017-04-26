@@ -28,7 +28,8 @@ fi
 
 cpu_bar_height=$(echo $CPU | grep -o '[0-9]*' | awk '{print $1 / 6.25}') #scaling for SVG bar; need to rewrite for bigger DPI (also as SVG code)
 
-cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='16px' height='16px' viewBox='0 0 16px 16px'><g transform='translate(0,16) scale(1, -1)'><rect rx='2px' y='1px' x='5px' height='14px' width='6px' fill='$bg_color' /><rect rx='1px' y='1px' x='5px' height='$cpu_bar_height' width='6px' fill='$fg_color' /></g></svg>" | base64 -w 0)
+cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='$hw' height='$hw' viewBox='0 0 120px 120px'><g transform='translate(0,120) scale(1, -1)'><rect rx='7px' y='10px' x='20px' height='100px' width='60px' fill='$bg_color' /><rect rx='7px' y='10px' x='20px' height='$cpu_bar_height' width='60px' fill='$fg_color' /></g></svg>" | base64 -w 0)
+
 
 echo "| image=$cpu_icon imageHeight=16"
 
