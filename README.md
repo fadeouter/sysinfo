@@ -16,16 +16,5 @@ Do before you going to use script:
 
 <h2>Screenshot</h2>
 
-Explanation:
-* total CPU consumption
-* top output (first 3 processes)
-* ```---```
-* memory 
-* swap
-* ```---```
-* disks
-* ```---```
-* system apps
-
 <img src="http://i.imgur.com/SSftwy4.png">
 
