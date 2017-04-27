@@ -8,7 +8,7 @@
 
 
 bg_color="#c9dfe5"	# pie bg color
-fg_color="#72586a"	# pie fill color
+fg_color="#555555"	# pie fill color
 hw="16px"		# adjust this variable to your screen DPI
 
 
@@ -26,15 +26,38 @@ if [ "$top_cpu" \> "$CPU" ]; then
 CPU=$(echo "$top_cpu"|awk '{ printf("%-4s", $1"%"); }')
 fi
 
-cpu_bar_height=$(echo $CPU | grep -o '[0-9]*')
-
-cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='$hw' height='$hw' viewBox='0 0 120px 120px'><g transform='translate(0,120) scale(1, -1)'><rect rx='7px' y='10px' x='20px' height='100px' width='60px' fill='$bg_color' /><rect rx='7px' y='10px' x='20px' height='$cpu_bar_height' width='60px' fill='$fg_color' /></g></svg>" | base64 -w 0)
+cpu_bar_height=$(echo $CPU | grep -o '[0-9]*') 
 
 
-echo "| image=$cpu_icon imageHeight=16"
+
+########### cpu bar - uncomment this if you want to see bar and delete or comment out cpu graph part
+
+#cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='$hw' height='$hw' viewBox='0 0 120px 120px'><g transform='translate(0,120) scale(1, -1)'><rect rx='7px' y='10px' x='20px' height='100px' width='60px' fill='$bg_color' /><rect rx='7px' y='10px' x='20px' height='$cpu_bar_height' width='60px' fill='$fg_color' /></g></svg>" | base64 -w 0)
+
+
+
+########### cpu graph ################
+
+HISTORY_FILE="${HOME}/.cpu.history"
+touch "${HISTORY_FILE}"
+PREVIOUS=$(tail -10 "${HISTORY_FILE}")
+echo "$PREVIOUS" > "${HISTORY_FILE}"
+echo "$cpu_bar_height" >> "${HISTORY_FILE}"
+
+CPU_GRAPH=$(cat $HISTORY_FILE | tr "\n" "\t" | awk '{print(100-$1,"L 10,"100-$2,"20,"100-$3,"30,"100-$4,"40,"100-$5,"50,"100-$6,"60,"100-$7,"70,"100-$8,"80,"100-$9,"90,"100-$10,"100,"100-$11)}')
+
+#cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='16px' height='16px' viewBox='0 0 100 100'> <g transform='translate(0,0)'> <path style='fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-opacity:1;stroke-width:2px;' d='$CPU_GRAPH' /> </g></svg>" | base64 -w 0) # graph style
+
+cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='30px' height='30px' viewBox='0 0 100 100'> <g transform='translate(0,0)'> <path style='fill:$fg_color;fill-opacity:1;fill-rule:evenodd;' d='M 0,100 V $CPU_GRAPH l 0,100' /> </g></svg>" | base64 -w 0) # fill style
+
+########### cpu graph end ############
+
+
+
+echo "| image=$cpu_icon imageHeight=16 imageWidth=28" #remove imageWidth property if you use bar instead of graph
 
 echo "---"
-echo "<b>$CPU</b> CPU | image=$cpu_icon imageHeight=16px font=monospace size=10"
+echo "<b>$CPU</b> CPU | image=$cpu_icon imageHeight=16 font=monospace size=10"
 
 echo "$top| font=monospace size=10 iconName=utilities-system-monitor  bash=gnome-system-monitor terminal=false"
 

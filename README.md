@@ -1,18 +1,14 @@
-<h3>System monitor extension for Argos</h3>
+<h3>System monitor extension for Argos with real CPU graph</h3>
 
 This is extension I created specially for [Argos](https://github.com/p-e-w/argos) and linux-powered computers.
-It is based on *free*, *top* and *vmstat* output.
+It is based on *free*, *top* and *vmstat* output and uses power of SVG to draw charts.
 
-It uses generated SVG images to display CPU consumption (bar chart) and to display memory and swap use (pie charts).
-
-Please note that the CPU consumption is *very* approximate and it not accurate as well.
+Please note that the CPU consumption is *very* approximate. Also, the real time between script execution isn't 1 sec because of latency of top and vmstat output.
 
 *TODO*
 
-* rewrite pie charts implementation
 * add disks usage charts
 * beautify charts with power of SVG
-* draw realtime charts
 
 Do before you going to use script:
 
@@ -21,13 +17,15 @@ Do before you going to use script:
 <h2>Screenshot</h2>
 
 Explanation:
-* top output (first 3 processes)
 * total CPU consumption
+* top output (first 3 processes)
 * ```---```
 * memory 
 * swap
 * ```---```
 * disks
+* ```---```
+* system apps
 
-<img src="http://i.imgur.com/jH1oxNq.png">
+<img src="http://i.imgur.com/SSftwy4.png">
 
