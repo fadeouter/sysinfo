@@ -19,7 +19,7 @@ hw="16px"		# adjust this variable to your screen DPI
 ################################################################
 
 CPU=$(echo $[100-$(vmstat 1 2|tail -1|awk '{print $15}')]|awk '{ printf("%-4s", $1"%"); }')
-top=$(top -bn 1 | tr -d '[]|' | grep -v "top\|Tasks\|Cpu\|KiB" | awk '{ printf("%-4s %-s\n", $9 / 2, $12); }' | head -n 5 | tail -n+3 | awk 1 ORS="\\\\n")
+top=$(top -o "%CPU" -bn 1 | tr -d '[]|' | grep -v "top\|Tasks\|Cpu\|KiB" | awk '{ printf("%-4s %-s\n", $9 / 2, $12); }' | head -n 5 | tail -n+3 | awk 1 ORS="\\\n")
 top_cpu=$(echo $top | sed 's/\\n/ /g' | awk '{ print $1 + $3 + $5}')
 
 if [ "$top_cpu" \> "$CPU" ]; then
