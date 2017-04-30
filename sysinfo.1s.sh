@@ -19,7 +19,7 @@ hw="16px"		# adjust this variable to your screen DPI
 ################################################################
 
 CPU=$(echo $[100-$(vmstat 1 2|tail -1|awk '{print $15}')]|awk '{ printf("%-4s", $1"%"); }')
-top=$(top -o "%CPU" -bn 1 | tr -d '[]|' | head -n 10 | tail -n 3 |  awk '{ printf("%-4s %-s\n", $9 / 2, $12); }' | awk 1 ORS="\\\n")
+top=$(top -o "%CPU" -bn 1 | tr -d '`[]|-' | head -n 10 | tail -n 3 |  awk '{ printf("%-4s %-s\n", $9 / 2, $12); }' | awk 1 ORS="\\\n")
 top_cpu=$(echo $top | sed 's/\\n/ /g' | awk '{ print $1 + $3 + $5}')
 
 if [ "$top_cpu" \> "$CPU" ]; then
@@ -122,18 +122,16 @@ get_disk_stats() {
     local IFS=$'\n'
     local i dfdata
 
-    dfdata=($(df -H))
+    dfdata=($(df -H | grep "/dev/mapper*\|/dev/sd*" | grep -v "/boot\|/shm" ))
 
     IFS=$OLDIFS
     for ((i = 0; i < ${#dfdata[@]}; i++)); do
         line=(${dfdata[$i]})
-        if [[ "${line[0]}" == /dev/mapper* ]] || [[ "${line[0]}" == /dev/sd* ]]; then
             name+=("${line[5]}")
             cap+=("${line[1]}")
             used+=("${line[2]}")
             free+=("${line[3]}")
             capacity+=("${line[4]/\%}")
-        fi
     done
 }
 
