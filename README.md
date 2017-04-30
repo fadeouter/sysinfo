@@ -9,6 +9,8 @@ Please note that the CPU consumption is *very* approximate. Also, the real time 
 
 * add disks usage charts
 * beautify charts with power of SVG
+* rewrite script in another lang
+* adopt code from [native System Monitor extension for GNOME Shell](https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet)
 
 Do before you going to use script:
 
