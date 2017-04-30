@@ -122,7 +122,7 @@ get_disk_stats() {
     local IFS=$'\n'
     local i dfdata
 
-    dfdata=($(df -H))
+    dfdata=($(df -H | tr -d '[]|'))
 
     IFS=$OLDIFS
     for ((i = 0; i < ${#dfdata[@]}; i++)); do
