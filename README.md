@@ -26,5 +26,3 @@ Top output on Archlinux don't show CPU. To fix this open script in text editor a
 
 <h2>License</h2>
 GNU GPL v3.0 - https://www.gnu.org/licenses/gpl-3.0.en.html
-
-
