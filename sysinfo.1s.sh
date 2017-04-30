@@ -19,7 +19,7 @@ hw="16px"		# adjust this variable to your screen DPI
 ################################################################
 
 CPU=$(echo $[100-$(vmstat 1 2|tail -1|awk '{print $15}')]|awk '{ printf("%-4s", $1"%"); }')
-top=$(top -o "%CPU" -bn 1 | tr -d '`[]|-' | head -n 10 | tail -n 3 |  awk '{ printf("%-4s %-s\n", $9 / 2, $12); }' | awk 1 ORS="\\\n")
+top=$(top -o "%CPU" -bn 1 | tr -d '`[]|-' | head -n 10 | tail -n 3 |  awk '{ printf("%-4s %-s\n", $9 / 2, $NF); }' | awk 1 ORS="\\\n")
 top_cpu=$(echo $top | sed 's/\\n/ /g' | awk '{ print $1 + $3 + $5}')
 
 if [ "$top_cpu" \> "$CPU" ]; then
@@ -144,4 +144,4 @@ for ((i = 0; i < ${#capacity[@]}; i++)); do
 done
 echo "Check free space | iconName=baobab bash=baobab terminal=false"
 echo "Open System Monitor | iconName=utilities-system-monitor bash=gnome-system-monitor terminal=false"
-
+print
