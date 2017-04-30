@@ -14,7 +14,7 @@ Please note that the CPU consumption is *very* approximate. Also, the real time 
 
 Do before you going to use script:
 
-```sudo apt install top sysstat```
+``sudo apt install top sysstat``
 
 <h3>Known bugs</h3>
 Top output on Archlinux don't show CPU. To fix this open script in text editor and replace ```$9 / 2``` to ```$7 / 2```. In further releases I will fix this by more elegant way.
