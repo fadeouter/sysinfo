@@ -127,7 +127,7 @@ get_disk_stats() {
     IFS=$OLDIFS
     for ((i = 0; i < ${#dfdata[@]}; i++)); do
         line=(${dfdata[$i]})
-        if [[ "${line[0]}" == /dev/mapper* ]] || [[ "${line[0]}" == /dev/sdb* ]]; then
+        if [[ "${line[0]}" == /dev/mapper* ]] || [[ "${line[0]}" == /dev/sd* ]]; then
             name+=("${line[5]}")
             cap+=("${line[1]}")
             used+=("${line[2]}")
