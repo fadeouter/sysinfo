@@ -7,11 +7,14 @@
 # before use: sudo apt install top sysstat
 
 
-bg_color="#c9dfe5"				# graph background color
-fg_color="#555555"				# graph foreground color
+chart_color="rgba(255,255,255,0.8)"		# CPU chart main color
+fg_color="rgba(255,255,255,0.8)"		# pie foreground color
+bg_color="rgba(0,0,0,0.3)"			# pie background color
 hw="16px"					# adjust this variable to your screen DPI
 font_style="font-size='9' font-family='Lato'"	# replace Lato with your system font name (for disk usage bars)
-
+font_partition="#ccc"				# font color of partition mountpoint
+font_color="white"				# font color of disk used space
+font_cap="#7eff35"				# font color of disk free space
 
 ################################################################
 #
@@ -51,7 +54,7 @@ CPU_GRAPH=$(cat $HISTORY_FILE | tr "\n" "\t" | awk '{print(100-$1,"L 5,"100-$2,"
 
 #cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='16px' height='16px' viewBox='0 0 100 100'> <g transform='translate(0,0)'> <path style='fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-opacity:1;stroke-width:2px;' d='$CPU_GRAPH' /> </g></svg>" | base64 -w 0) # graph style
 
-cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='28px' height='28px' viewBox='0 0 100 100'> <g transform='translate(0,0)'> <path style='fill:$fg_color;fill-opacity:1;fill-rule:evenodd;' d='M 0,100 V $CPU_GRAPH l 0,100' /> </g></svg>" | base64 -w 0) # fill style
+cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='28px' height='28px' viewBox='0 0 100 100'> <g transform='translate(0,0)'> <path style='fill:$chart_color;fill-opacity:1;fill-rule:evenodd;' d='M 0,100 V $CPU_GRAPH l 0,100' /> </g></svg>" | base64 -w 0) # fill style
 
 ########### cpu graph end ############
 
@@ -144,16 +147,17 @@ font_style="font-size='9' font-family='Lato'"
 height="10"
 
 for ((i = 0; i < ${#capacity[@]}; i++)); do
-echo "${cap[$i]}   <span color='#555555' font='10'>${name[$i]}</span> | iconName=drive-harddisk-system length=20"
-#echo "${used[$i]} / <span color='green'>${free[$i]}</span> (${capacity[$i]} %)| refresh=false  iconName=image-filter-symbolic"
-fg_green=$(echo ${capacity[$i]} | awk '{print 255 - $0 * 2.55 }' | awk '{ printf("%.0f\n", $1); }')
-fg_red=$(echo ${capacity[$i]} | awk '{print $0 * 2.55 }' | awk '{ printf("%.0f\n", $1); }')
-fg_d_color="rgba($fg_red,$fg_green,0,0.9)"
-bar=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='160px' height='22px' viewBox='0 0 100 11'> <rect width='100' height='1.5' x='0' y='$height' fill='$bg_color' rx='1px'/> <rect width='${capacity[$i]}' height='1.5' x='0' y='$height' fill='$fg_d_color' rx='1px'/> <text x='0' y='7' $font_style>${used[$i]} / <tspan fill='green'>${free[$i]}</tspan> (${capacity[$i]} %)</text> </svg>" | base64 -w 0)
-echo "|image=$bar refresh=true iconName=drive-harddisk-system-symbolic"
-echo "---"
+    echo "${cap[$i]}   <span color='$font_partition' font='10'>${name[$i]}</span> | iconName=drive-harddisk-system-symbolic length=20"
+    #echo "${used[$i]} / <span color='green'>${free[$i]}</span> (${capacity[$i]} %)| refresh=false  iconName=image-filter-symbolic"
+    diskbar_green=$(echo ${capacity[$i]} | awk '{print 255 - $0 * 2.55 }' | awk '{ printf("%.0f\n", $1); }')
+    diskbar_red=$(echo ${capacity[$i]} | awk '{print $0 * 2.55 }' | awk '{ printf("%.0f\n", $1); }')
+    diskbar_color="rgba($diskbar_red,$diskbar_green,0,0.7)"
+    diskbar=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='160px' height='22px' viewBox='0 0 100 11'> <rect width='100' height='2' x='0' y='$height' fill='$fg_color' rx='1px'/> <rect width='${capacity[$i]}' height='2' x='0' y='$height' fill='$diskbar_color' rx='1px'/> <text x='0' y='7' $font_style><tspan fill='$font_color'>${used[$i]} / <tspan fill='$font_cap'>${free[$i]}</tspan> (${capacity[$i]} %)</tspan></text> </svg>" | base64 -w 0)
+    echo "|image=$diskbar refresh=true iconName=drive-harddisk-system"
+    echo "---"
 done
 
 echo "Check free space | iconName=baobab bash=baobab terminal=false"
 echo "Open System Monitor | iconName=utilities-system-monitor bash=gnome-system-monitor terminal=false"
 print
+
