@@ -11,9 +11,7 @@ Please note that the CPU consumption is **very** approximate. Also, the real tim
 * rewrite script in another lang
 * adopt code from [native System Monitor extension for GNOME Shell](https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet)
 
-Do before you going to use script:
-
-`sudo apt install top sysstat`
+Do before you going to use script: `sudo apt install top sysstat`
 
 <h3>Known bugs</h3>
 Different configurations of **top** utility doesn't allow to show processes and it's CPU consumtion. 
