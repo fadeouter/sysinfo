@@ -13,8 +13,8 @@ Please note that the CPU consumption is **very** approximate. Also, the real tim
 
 Do before you going to use script: `sudo apt install top sysstat`
 
-<h3>Known bugs</h3>
-Different configurations of **top** utility doesn't allow to show processes and it's CPU consumtion. 
+**Known bugs**
+Different configurations of **top** utility doesn't allow to show processes and it's CPU consumtion (see opened issue here). 
 To fix this, open script in text editor and replace `$9 / 2` to `$7 / 2`. Also you may need to change `head -n 10` to `head - 13`.
 In further releases I will fix this by more elegant way.
 
