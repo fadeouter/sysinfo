@@ -7,9 +7,10 @@
 # before use: sudo apt install top sysstat
 
 
-bg_color="#c9dfe5"	# graph background color
-fg_color="#555555"	# graph foreground color
-hw="16px"		# adjust this variable to your screen DPI
+bg_color="#c9dfe5"				# graph background color
+fg_color="#555555"				# graph foreground color
+hw="16px"					# adjust this variable to your screen DPI
+font_style="font-size='9' font-family='Lato'"	# replace Lato with your system font name (for disk usage bars)
 
 
 ################################################################
@@ -42,21 +43,21 @@ cpu_bar_height=$(echo $CPU | grep -o '[0-9]*')
 
 HISTORY_FILE="${HOME}/.cpu.history"
 touch "${HISTORY_FILE}"
-PREVIOUS=$(tail -10 "${HISTORY_FILE}")
+PREVIOUS=$(tail -20 "${HISTORY_FILE}")
 echo "$PREVIOUS" > "${HISTORY_FILE}"
 echo "$cpu_bar_height" >> "${HISTORY_FILE}"
 
-CPU_GRAPH=$(cat $HISTORY_FILE | tr "\n" "\t" | awk '{print(100-$1,"L 10,"100-$2,"20,"100-$3,"30,"100-$4,"40,"100-$5,"50,"100-$6,"60,"100-$7,"70,"100-$8,"80,"100-$9,"90,"100-$10,"100,"100-$11)}')
+CPU_GRAPH=$(cat $HISTORY_FILE | tr "\n" "\t" | awk '{print(100-$1,"L 5,"100-$2,"10,"100-$3,"15,"100-$4,"20,"100-$5,"25,"100-$6,"30,"100-$7,"35,"100-$8,"40,"100-$9,"45,"100-$10,"50,"100-$11,"55,"100-$12,"60,"100-$13,"65,"100-$14,"70,"100-$15,"75,"100-$16,"80,"100-$17,"85,"100-$18,"90,"100-$19,"95,"100-$20)}')
 
 #cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='16px' height='16px' viewBox='0 0 100 100'> <g transform='translate(0,0)'> <path style='fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-opacity:1;stroke-width:2px;' d='$CPU_GRAPH' /> </g></svg>" | base64 -w 0) # graph style
 
-cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='30px' height='30px' viewBox='0 0 100 100'> <g transform='translate(0,0)'> <path style='fill:$fg_color;fill-opacity:1;fill-rule:evenodd;' d='M 0,100 V $CPU_GRAPH l 0,100' /> </g></svg>" | base64 -w 0) # fill style
+cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='28px' height='28px' viewBox='0 0 100 100'> <g transform='translate(0,0)'> <path style='fill:$fg_color;fill-opacity:1;fill-rule:evenodd;' d='M 0,100 V $CPU_GRAPH l 0,100' /> </g></svg>" | base64 -w 0) # fill style
 
 ########### cpu graph end ############
 
 
 
-echo "| image=$cpu_icon imageHeight=16 imageWidth=28" #remove imageWidth property if you use bar instead of graph
+echo "| image=$cpu_icon imageHeight=14 imageWidth=28" #remove imageWidth property if you use bar instead of graph
 
 echo "---"
 echo "<b>$CPU</b> CPU | image=$cpu_icon imageHeight=16 font=monospace size=10"
@@ -139,11 +140,20 @@ get_disk_stats() {
 
 get_disk_stats
 
+font_style="font-size='9' font-family='Lato'"
+height="10"
+
 for ((i = 0; i < ${#capacity[@]}; i++)); do
-	echo "${cap[$i]}   <span color='#555555' font='10'>${name[$i]}</span> | iconName=drive-harddisk-system length=20"
-	echo "${used[$i]} / <span color='green'>${free[$i]}</span> (${capacity[$i]} %)| refresh=false  iconName=image-filter-symbolic"
-        echo "---"
+echo "${cap[$i]}   <span color='#555555' font='10'>${name[$i]}</span> | iconName=drive-harddisk-system length=20"
+#echo "${used[$i]} / <span color='green'>${free[$i]}</span> (${capacity[$i]} %)| refresh=false  iconName=image-filter-symbolic"
+fg_green=$(echo ${capacity[$i]} | awk '{print 255 - $0 * 2.55 }' | awk '{ printf("%.0f\n", $1); }')
+fg_red=$(echo ${capacity[$i]} | awk '{print $0 * 2.55 }' | awk '{ printf("%.0f\n", $1); }')
+fg_d_color="rgba($fg_red,$fg_green,0,0.9)"
+bar=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='160px' height='22px' viewBox='0 0 100 11'> <rect width='100' height='1.5' x='0' y='$height' fill='$bg_color' rx='1px'/> <rect width='${capacity[$i]}' height='1.5' x='0' y='$height' fill='$fg_d_color' rx='1px'/> <text x='0' y='7' $font_style>${used[$i]} / <tspan fill='green'>${free[$i]}</tspan> (${capacity[$i]} %)</text> </svg>" | base64 -w 0)
+echo "|image=$bar refresh=true iconName=drive-harddisk-system-symbolic"
+echo "---"
 done
+
 echo "Check free space | iconName=baobab bash=baobab terminal=false"
 echo "Open System Monitor | iconName=utilities-system-monitor bash=gnome-system-monitor terminal=false"
 print
