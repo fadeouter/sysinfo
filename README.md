@@ -28,7 +28,7 @@ In further releases I will fix this by more elegant way.
 
 Replace variables in start of script to use with light Shell/GTK theme:
 
-``
+```
 chart_color="rgba(0,0,0,0.8)"			# CPU chart main color
 fg_color="rgba(0,0,0,0.5)"			# pie foreground color
 bg_color="rgba(125,125,125,0.2)"		# pie background color
@@ -37,7 +37,7 @@ font_style="font-size='9' font-family='Lato'"	# replace Lato with your system fo
 font_partition="#555555"			# font color of partition mountpoint
 font_color="#333333"				# font color of disk used space
 font_cap="green"				# font color of disk free space
-``
+```
 
 <h2>License</h2>
 GNU GPL v3.0 - https://www.gnu.org/licenses/gpl-3.0.en.html
