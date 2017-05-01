@@ -1,9 +1,9 @@
 <h2>System monitor extension for Argos with real CPU graph</h2>
 
 This extension created specially for [Argos](https://github.com/p-e-w/argos) and linux-powered computers w/ GNOME shell.
-It is based on *free*, *top* and *vmstat* output and uses power of SVG to draw charts.
+It is based on **free**, **top**, **df** and **vmstat** output and uses power of SVG to draw charts.
 
-Please note that the CPU consumption is *very* approximate. Also, the real time between script execution isn't 1 sec because of latency of top and vmstat output.
+Please note that the CPU consumption is **very** approximate. Also, the real time between script execution isn't 1 sec because of latency of top and vmstat output.
 
 **TODO**
 
@@ -13,7 +13,7 @@ Please note that the CPU consumption is *very* approximate. Also, the real time 
 
 Do before you going to use script:
 
-``sudo apt install top sysstat``
+`sudo apt install top sysstat`
 
 <h3>Known bugs</h3>
 Different configurations of **top** utility doesn't allow to show processes and it's CPU consumtion. 
