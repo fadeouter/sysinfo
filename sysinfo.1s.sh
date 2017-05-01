@@ -143,7 +143,6 @@ get_disk_stats() {
 
 get_disk_stats
 
-font_style="font-size='9' font-family='Lato'"
 height="10"
 
 for ((i = 0; i < ${#capacity[@]}; i++)); do
