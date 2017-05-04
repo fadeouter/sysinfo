@@ -158,15 +158,20 @@ get_disk_stats() {
 get_disk_stats
 
 height="10"
+disk_icon="drive-harddisk-system-symbolic"
 
 for ((i = 0; i < ${#capacity[@]}; i++)); do
-    echo "${cap[$i]}   <span color='$disk_partition_font_color' font='10'>${name[$i]}</span> | iconName=drive-harddisk-system-symbolic length=20"
+
+if [[ ${name[$i]} = \/media* ]]; then
+disk_icon="drive-harddisk-usb-symbolic"
+fi
+    echo "${cap[$i]}   <span color='$disk_partition_font_color' font='10'>${name[$i]}</span> | iconName=$disk_icon length=20"
     #echo "${used[$i]} / <span color='green'>${free[$i]}</span> (${capacity[$i]} %)| refresh=false  iconName=image-filter-symbolic"
     diskbar_green=$(echo ${capacity[$i]} | awk '{print 255 - $0 * 2.55 }' | awk '{ printf("%.0f\n", $1); }')
     diskbar_red=$(echo ${capacity[$i]} | awk '{print $0 * 2.55 }' | awk '{ printf("%.0f\n", $1); }')
     diskbar_color="rgba($diskbar_red,$diskbar_green,0,0.7)"
     diskbar=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='160px' height='22px' viewBox='0 0 100 11'> <rect width='100' height='2' x='0' y='$height' fill='$diskbar_bg_color' rx='1px'/> <rect width='${capacity[$i]}' height='2' x='0' y='$height' fill='$diskbar_color' rx='1px'/> <text x='0' y='7' $diskbar_font_style><tspan fill='$diskbar_font'>${used[$i]} / <tspan fill='$diskbar_font_highlighted'>${free[$i]}</tspan> (${capacity[$i]} %)</tspan></text> </svg>" | base64 -w 0)
-    echo "|image=$diskbar refresh=true iconName=drive-harddisk-system"
+    echo "|image=$diskbar bash='nautilus ${name[$i]}' terminal=false iconName=drive-harddisk-system"
     echo "---"
 done
 
