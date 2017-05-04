@@ -6,13 +6,16 @@
 # author: fadeouter (https://github.com/fadeouter/)
 # before use: sudo apt install top sysstat
 
+hw="16px"						   # adjust this variable to your screen DPI for appropriate SVG rendering
+diskbar_font_style="font-size='9' font-family='Cantarell'" # replace with your system font name (for disk usage bars), also as size
+symbolic="-symbolic"					   # uncomment to revert icons to multicolour
+
 ### LIGHT THEME
 
 chart_color="rgba(0,0,0,0.8)"				# CPU chart main color
 pie_fg_color="rgba(0,0,0,0.5)"				# pie foreground color
 pie_bg_color="rgba(125,125,125,0.2)"			# pie background color
 hw="16px"						# adjust this variable to your screen DPI
-diskbar_font_style="font-size='9' font-family='Lato'"	# replace Lato with your system font name (for disk usage bars)
 disk_partition_font_color="#555555"			# font color of partition mountpoint
 diskbar_font="#333333"					# font color of disk used space
 diskbar_font_highlighted="green"			# font color of disk free space
@@ -23,12 +26,11 @@ diskbar_bg_color=$pie_bg_color				# disk bar bg color
 chart_color="rgba(255,255,255,0.8)"			# CPU chart main color
 pie_fg_color="rgba(255,255,255,0.8)"			# pie foreground color
 pie_bg_color="rgba(0,0,0,0.3)"				# pie background color	
-hw="16px"						# adjust this variable to your screen DPI
-diskbar_font_style="font-size='9' font-family='Lato'"	# replace Lato with your system font name (for disk usage bars)
 disk_partition_font_color="#ccc"			# font color of partition mountpoint
 diskbar_font="white"					# font color of disk used space
 diskbar_font_highlighted="#7eff35"			# font color of disk free space
 diskbar_bg_color=$pie_fg_color				# disk bar bg color
+
 
 ################################################################
 #
@@ -79,7 +81,7 @@ echo "| image=$cpu_icon imageHeight=14 imageWidth=28" #remove imageWidth propert
 echo "---"
 echo "<b>$CPU</b> CPU | image=$cpu_icon imageHeight=16 font=monospace size=10"
 
-echo "$top| font=monospace size=10 iconName=utilities-system-monitor  bash=gnome-system-monitor terminal=false"
+echo "$top| font=monospace size=10 iconName=utilities-system-monitor$symbolic  bash=gnome-system-monitor terminal=false"
 
 echo "---"
 
@@ -158,24 +160,25 @@ get_disk_stats() {
 get_disk_stats
 
 height="10"
-disk_icon="drive-harddisk-system-symbolic"
+disk_icon="drive-harddisk-system$symbolic"
 
 for ((i = 0; i < ${#capacity[@]}; i++)); do
 
 if [[ ${name[$i]} = \/media* ]]; then
-disk_icon="drive-harddisk-usb-symbolic"
+disk_icon="drive-removable-media$symbolic"
 fi
-    echo "${cap[$i]}   <span color='$disk_partition_font_color' font='10'>${name[$i]}</span> | iconName=$disk_icon length=20"
-    #echo "${used[$i]} / <span color='green'>${free[$i]}</span> (${capacity[$i]} %)| refresh=false  iconName=image-filter-symbolic"
+    echo "${cap[$i]}   <span color='$disk_partition_font_color' font='10'>${name[$i]}</span> | iconName=$disk_icon length=20 bash='nautilus ${name[$i]}' terminal=false"
+    #echo "${used[$i]} / <span color='green'>${free[$i]}</span> (${capacity[$i]} %)| refresh=false  iconName=image-filter$symbolic"
     diskbar_green=$(echo ${capacity[$i]} | awk '{print 255 - $0 * 2.55 }' | awk '{ printf("%.0f\n", $1); }')
     diskbar_red=$(echo ${capacity[$i]} | awk '{print $0 * 2.55 }' | awk '{ printf("%.0f\n", $1); }')
     diskbar_color="rgba($diskbar_red,$diskbar_green,0,0.7)"
     diskbar=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='160px' height='22px' viewBox='0 0 100 11'> <rect width='100' height='2' x='0' y='$height' fill='$diskbar_bg_color' rx='1px'/> <rect width='${capacity[$i]}' height='2' x='0' y='$height' fill='$diskbar_color' rx='1px'/> <text x='0' y='7' $diskbar_font_style><tspan fill='$diskbar_font'>${used[$i]} / <tspan fill='$diskbar_font_highlighted'>${free[$i]}</tspan> (${capacity[$i]} %)</tspan></text> </svg>" | base64 -w 0)
-    echo "|image=$diskbar bash='nautilus ${name[$i]}' terminal=false iconName=drive-harddisk-system"
+    echo "|image=$diskbar iconName=baobab$symbolic"
     echo "---"
 done
 
-echo "Check free space | iconName=baobab bash=baobab terminal=false"
-echo "Open System Monitor | iconName=utilities-system-monitor bash=gnome-system-monitor terminal=false"
+
+echo "Check free space | iconName=baobab$symbolic bash=baobab terminal=false"
+echo "Open System Monitor | iconName=utilities-system-monitor$symbolic bash=gnome-system-monitor terminal=false"
 print
 
