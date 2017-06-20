@@ -4,32 +4,45 @@
 # based on some findings on the internet
 # based on Ganesh V BitBar script (https://github.com/ganeshv/mtop)
 # author: fadeouter (https://github.com/fadeouter/)
-# before use: sudo apt install top sysstat
 
-hw="16px"						   # adjust this variable to your screen DPI for appropriate SVG rendering
-diskbar_font_style="font-size='9' font-family='Cantarell'" # replace with your system font name (for disk usage bars), also as size
-symbolic="-symbolic"					   # uncomment to revert icons to multicolour
+
+scale="2"				    # if you have HIDPI screen
+svg_font_size="9"			# probably you won't change this
+svg_font_family="Ubuntu"	# set as theme font
+#symbolic="-symbolic"		# uncomment to use multicolour icons
+
 
 ### LIGHT THEME
 
-chart_color="rgba(0,0,0,0.8)"				# CPU chart main color
-pie_fg_color="rgba(0,0,0,0.5)"				# pie foreground color
-pie_bg_color="rgba(125,125,125,0.2)"			# pie background color
-hw="16px"						# adjust this variable to your screen DPI
-disk_partition_font_color="#555555"			# font color of partition mountpoint
-diskbar_font="#333333"					# font color of disk used space
-diskbar_font_highlighted="green"			# font color of disk free space
-diskbar_bg_color=$pie_bg_color				# disk bar bg color
+chart_color="rgba(0,0,0,0.7)"		# CPU chart main color
+pie_fg_color="rgba(0,0,0,0.5)"		# pie foreground color
+pie_bg_color="rgba(125,125,125,0.2)"	# pie background color
+text_muted="#555555"			# font color of partition mountpoint
+diskbar_font="#333333"			# font color of disk used space
+diskbar_font_highlighted="green"	# font color of disk free space
+diskbar_bg_color=$pie_bg_color		# disk bar bg color
 
+	
 ### DARK THEME
 
-chart_color="rgba(255,255,255,0.8)"			# CPU chart main color
-pie_fg_color="rgba(255,255,255,0.8)"			# pie foreground color
-pie_bg_color="rgba(0,0,0,0.3)"				# pie background color	
-disk_partition_font_color="#ccc"			# font color of partition mountpoint
-diskbar_font="white"					# font color of disk used space
-diskbar_font_highlighted="#7eff35"			# font color of disk free space
-diskbar_bg_color=$pie_fg_color				# disk bar bg color
+chart_color="rgba(255,255,255,0.8)"	# CPU chart main color
+pie_fg_color="rgba(255,255,255,0.8)"	# pie foreground color
+pie_bg_color="rgba(0,0,0,0.3)"		# pie background color	
+text_muted="#ccc"			# font color of partition mountpoint
+diskbar_font="white"			# font color of disk used space
+diskbar_font_highlighted="#7eff35"	# font color of disk free space
+diskbar_bg_color=$pie_fg_color		# disk bar bg color
+
+
+
+### SIZES OF SVG OBJECTS
+
+icon_h=$(expr 12 \* $scale)
+graph_h=$(expr 16 \* $scale)
+graph_w=$(expr 32 \* $scale)
+diskbar_h=$(expr 18 \* $scale)
+diskbar_w=$(expr 120 \* $scale)
+px='px'
 
 
 ################################################################
@@ -38,25 +51,10 @@ diskbar_bg_color=$pie_fg_color				# disk bar bg color
 #
 ################################################################
 
-CPU=$(echo $[100-$(vmstat 1 2|tail -1|awk '{print $15}')]|awk '{ printf("%-4s", $1"%"); }')
-top=$(top -o "%CPU" -bn 1 | tr -d '`[]|-' | head -n 10 | tail -n 3 |  awk '{ printf("%-4s %-s\n", $9 / 2, $NF); }' | awk 1 ORS="\\\n")
-top_cpu=$(echo $top | sed 's/\\n/ /g' | awk '{ print $1 + $3 + $5}')
+### SET XXX to number of CPU cores '{ printf("%-4s %-s\n", $9 / XXX, $NF); }'
 
-#top -bn1 | head -n 7 | tail -n 1 | tr " " "\n" | grep -ve "^$" | awk '/CPU/{print NR}'
-
-if [ "$top_cpu" \> "$CPU" ]; then
-CPU=$(echo "$top_cpu"|awk '{ printf("%-4s", $1"%"); }')
-fi
-
-cpu_bar_height=$(echo $CPU | grep -o '[0-9]*') 
-
-
-
-########### cpu bar - uncomment this if you want to see bar and delete or comment out cpu graph part
-
-#cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='$hw' height='$hw' viewBox='0 0 120px 120px'><g transform='translate(0,120) scale(1, -1)'><rect rx='7px' y='10px' x='20px' height='100px' width='60px' fill='$pie_bg_color' /><rect rx='7px' y='10px' x='20px' height='$cpu_bar_height' width='60px' fill='$pie_fg_color' /></g></svg>" | base64 -w 0)
-
-
+top=$(top -o "%CPU" -bn 1 | tr -d '[]|' | sed 's\`-\ \g' | sed 's\+\…\g' | head -n 14 | tail -n 6 | awk '{ printf("%-4s %-s\n", $9 / 4, $NF); }' | awk 1 ORS="\\\n")
+CPU=$(echo $top | sed 's/\\n/ /g' | awk '{ print $1 + $3 + $5 + $7 + $9 + $12}' | awk '{ printf("%.0f\n", $1"%"); }')
 
 ########### cpu graph ################
 
@@ -64,26 +62,20 @@ HISTORY_FILE="${HOME}/.cpu.history"
 touch "${HISTORY_FILE}"
 PREVIOUS=$(tail -20 "${HISTORY_FILE}")
 echo "$PREVIOUS" > "${HISTORY_FILE}"
-echo "$cpu_bar_height" >> "${HISTORY_FILE}"
+echo "$CPU" >> "${HISTORY_FILE}"
 
 CPU_GRAPH=$(cat $HISTORY_FILE | tr "\n" "\t" | awk '{print(100-$1,"L 5,"100-$2,"10,"100-$3,"15,"100-$4,"20,"100-$5,"25,"100-$6,"30,"100-$7,"35,"100-$8,"40,"100-$9,"45,"100-$10,"50,"100-$11,"55,"100-$12,"60,"100-$13,"65,"100-$14,"70,"100-$15,"75,"100-$16,"80,"100-$17,"85,"100-$18,"90,"100-$19,"95,"100-$20)}')
 
-#cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='16px' height='16px' viewBox='0 0 100 100'> <g transform='translate(0,0)'> <path style='fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-opacity:1;stroke-width:2px;' d='$CPU_GRAPH' /> </g></svg>" | base64 -w 0) # graph style
-
-cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='28px' height='28px' viewBox='0 0 100 100'> <g transform='translate(0,0)'> <path style='fill:$chart_color;fill-opacity:1;fill-rule:evenodd;' d='M 0,100 V $CPU_GRAPH l 0,100' /> </g></svg>" | base64 -w 0) # fill style
+cpu_icon=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='56px' height='56px' viewBox='0 0 100 100'> <g transform='translate(0,0)'> <path style='fill:$chart_color;fill-opacity:1;fill-rule:evenodd;' d='M 0,100 V $CPU_GRAPH l 0,100' /> </g></svg>" | base64 -w 0) # fill style
 
 ########### cpu graph end ############
 
-
-
-echo "| image=$cpu_icon imageHeight=14 imageWidth=28" #remove imageWidth property if you use bar instead of graph
-
+echo "| image=$cpu_icon imageHeight=$graph_h imageWidth=$graph_w" 
 echo "---"
-echo "<b>$CPU</b> CPU | image=$cpu_icon imageHeight=16 font=monospace size=10"
-
-echo "$top| font=monospace size=10 iconName=utilities-system-monitor$symbolic  bash=gnome-system-monitor terminal=false"
-
+echo "<b>$CPU%</b> CPU | image=$cpu_icon imageHeight=$icon_h font=monospace size=10"
+echo "$top| font=monospace size=9 iconName=utilities-system-monitor$symbolic  bash=gnome-system-monitor terminal=false"
 echo "---"
+
 
 ################################################################
 #
@@ -167,13 +159,13 @@ for ((i = 0; i < ${#capacity[@]}; i++)); do
 if [[ ${name[$i]} = \/media* ]]; then
 disk_icon="drive-removable-media$symbolic"
 fi
-    echo "${cap[$i]}   <span color='$disk_partition_font_color' font='10'>${name[$i]}</span> | iconName=$disk_icon length=20 bash='nautilus ${name[$i]}' terminal=false"
+    echo "${cap[$i]}   <span color='$text_muted' font='10'>${name[$i]}</span> | iconName=$disk_icon  imageHeight=$icon_h length=20 bash='nautilus ${name[$i]}' terminal=false"
     #echo "${used[$i]} / <span color='green'>${free[$i]}</span> (${capacity[$i]} %)| refresh=false  iconName=image-filter$symbolic"
     diskbar_green=$(echo ${capacity[$i]} | awk '{print 255 - $0 * 2.55 }' | awk '{ printf("%.0f\n", $1); }')
     diskbar_red=$(echo ${capacity[$i]} | awk '{print $0 * 2.55 }' | awk '{ printf("%.0f\n", $1); }')
     diskbar_color="rgba($diskbar_red,$diskbar_green,0,0.7)"
-    diskbar=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='160px' height='22px' viewBox='0 0 100 11'> <rect width='100' height='2' x='0' y='$height' fill='$diskbar_bg_color' rx='1px'/> <rect width='${capacity[$i]}' height='2' x='0' y='$height' fill='$diskbar_color' rx='1px'/> <text x='0' y='7' $diskbar_font_style><tspan fill='$diskbar_font'>${used[$i]} / <tspan fill='$diskbar_font_highlighted'>${free[$i]}</tspan> (${capacity[$i]} %)</tspan></text> </svg>" | base64 -w 0)
-    echo "|image=$diskbar iconName=baobab$symbolic"
+    diskbar=$(echo "<svg xmlns='http://www.w3.org/2000/svg' width='$diskbar_w$px' height='$diskbar_h$px' viewBox='0 0 100 11'> <rect width='100' height='2' x='0' y='$height' fill='$diskbar_bg_color' rx='1px'/> <rect width='${capacity[$i]}' height='2' x='0' y='$height' fill='$diskbar_color' rx='1px'/> <text x='0' y='7' font-size='$svg_font_size' font-family='$svg_font_family'><tspan fill='$diskbar_font'>${used[$i]} / <tspan fill='$diskbar_font_highlighted'>${free[$i]}</tspan> (${capacity[$i]} %)</tspan></text> </svg>" | base64 -w 0)
+    echo "|image=$diskbar iconName=baobab$symbolic imageHeight=$diskbar_h"
     echo "---"
 done
 
