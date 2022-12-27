@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# This script is designed for Argos extension (https://extensions.gnome.org/extension/1176/argos/) 
+# This script designed for Argos extension (https://extensions.gnome.org/extension/1176/argos/) 
 # and allows informing on current CPU and memory consumption,
 # IP address, ping to up to two servers, temperature, uptime, disks and processes.
 
-# In order to properly work of the script, you need to set the number of CPU cores (see below) and adjust the size of the graphs
+# In order to properly work you need to set the number of CPU cores (see below) and adjust the size of the graphs
 # depending on your screen size.
 
 # Go to line 257 and set your number.
-# XXX must be equal to a number of CPU cores: '...{ printf("%-4s %-s\n", $9 / XXX, $NF); }...'
+# XXX must be equal to the number of CPU cores: '...{ printf("%-4s %-s\n", $9 / XXX, $NF); }...'
 
 # Based on Ganesh V BitBar script (https://github.com/ganeshv/mtop)
 # and Leo-G script (https://github.com/Leo-G/DevopsWiki/wiki/How-Linux-CPU-Usage-Time-and-Percentage-is-calculated)
