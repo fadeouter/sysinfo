@@ -7,12 +7,6 @@ As you see at screenshot, CPU chart has 3 colors: green for iowait consumption, 
 
 Please note that the CPU consumption is approximate. It calculates by **/proc/stat** output, also as memory by **free**, temperature by **/sys/class/thermal/thermal_zone0/temp** and disks by **df** outputs.
 
-<h3>TODO</h3>
-
-* rewrite script in another lang
-* find workaround for top issue
-* add another improvements
-
 <h3>Known bugs</h3>
 
 Different configurations of **top** utility doesn't allow to show processes list (see opened issue here). 
